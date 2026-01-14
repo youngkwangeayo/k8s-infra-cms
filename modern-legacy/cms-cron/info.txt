@@ -1,0 +1,4 @@
+# cms (웹 크론서비스)
+
+- cms-deployment.yaml
+- cms-configmap.yaml

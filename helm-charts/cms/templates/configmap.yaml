@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cms.fullname" . }}-config
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "cms.labels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+data:
+{{- toYaml .Values.envData | nindent 4 }}

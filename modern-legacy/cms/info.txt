@@ -1,0 +1,5 @@
+# cms (웹어플리케이션 풀서버)
+
+- cms-deployment.yaml
+- cms-service.yaml
+- cms-ingress.yaml (URL path: / 등 기본 루트로 분기할 경우)

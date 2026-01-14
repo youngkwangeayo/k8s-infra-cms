@@ -1,0 +1,18 @@
+
+namespaceApp: "dev-aiagent"
+
+ingress:
+  hosts:
+    - name: aiagent-dev.nextpay.co.kr
+      service: aiagent-service
+      path: "/"
+    - name: aiagent-dev-system.nextpay.co.kr
+      service: aiagent-system-service
+      path: "/"
+    - name: aiagent-dev-api.nextpay.co.kr
+      service: aiagent-api-service
+      path: "/"
+    # new domain  
+    - name: aiagent-dev.nextaistore.com
+      service: aiagent-service
+      path: "/"

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-cron-cron
+  namespace: dev-cms
+  labels: # Deployment 리소스 자체를 식별하는 라벨 (kubectl get deploy -l app.kubernetes.io/name=cms-cron)
+    app.kubernetes.io/name: cms-cron
+    app.kubernetes.io/app: cms-cron
+    app.kubernetes.io/version: "1"
+    app.kubernetes.io/component: cron
+spec:
+  replicas: 1 # 동시에 실행할 Pod 개수 (고가용성을 위해 최소 2개 권장)
+  strategy: # 배포(업데이트) 시 Pod 교체 전략
+    type: RollingUpdate # 무중단 배포: 새 Pod 생성 → 준비되면 → 기존 Pod 종료
+    rollingUpdate:
+      maxSurge: 1 # 업데이트 중 replicas 초과로 추가 생성 가능한 Pod 수 (2+1=최대 3개)
+      maxUnavailable: 1 # 업데이트 중 동시에 종료 가능한 Pod 수 (최소 1개는 항상 Running)
+  selector: # Deployment가 관리할 Pod를 찾는 조건 (아래 matchLabels와 template.metadata.labels가 반드시 일치해야 함)
+    matchLabels:
+      app: cms-cron # 이 라벨을 가진 Pod만 이 Deployment가 관리
+  template: # Pod 생성 템플릿 (ReplicaSet이 이 템플릿으로 Pod 생성)
+    metadata:
+      labels: # Pod에 부여할 라벨 (selector.matchLabels와 일치 필수, Service도 이 라벨로 Pod 선택)
+        app: cms-cron
+    spec:
+      containers:
+        - name: cms-cron
+          image: 3654*****.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-***:latest
+          imagePullPolicy: Always # 항상 최신 이미지 pull (개발환경용, 운영에서는 특정 태그 권장)
+          envFrom: # ConfigMap의 모든 key-value를 환경변수로 주입
+            - configMapRef:
+                name: cms-cron-config
+          resources: # 컨테이너 리소스 제한 (노드 자원 보호 및 스케줄링용)
+            requests: # 최소 보장 리소스 (스케줄러가 노드 선택 시 참고) (1000m = 1 CPU 코어, 100m = 0.1 CPU)
+              cpu: "300m" # 0.300 CPU core
+              memory: "500Mi"
+            limits: # 최대 사용 가능 리소스 (초과 시 CPU throttling, 메모리는 OOMKilled)
+              cpu: "600m" # 0.6 CPU core
+              memory: "700Mi"
+          # ============ Health Check Probes ============
+          # 크론 서비스는 포트 노출 없이 exec probe로 프로세스 생존 체크
+          startupProbe: # 앱 초기 기동 체크
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - pgrep -f 'node' || exit 1
+            periodSeconds: 5 # 5초마다 체크
+            failureThreshold: 12 # 12번 실패 시 컨테이너 재시작 (5초 × 12 = 최대 60초 대기)
+          livenessProbe: # 앱 생존 체크 (실패 시 컨테이너 재시작)
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - pgrep -f 'node' || exit 1
+            initialDelaySeconds: 10 # startupProbe 성공 후 10초 뒤 첫 체크
+            periodSeconds: 10 # 10초 간격으로 체크
+            timeoutSeconds: 5 # 응답 대기 시간
+            # failureThreshold 기본값: 3 (3번 실패 시 컨테이너 kill → 재시작)
+          # readinessProbe 제거: 크론 서비스는 트래픽을 받지 않으므로 불필요
+          # ports 제거: 외부 노출 없음

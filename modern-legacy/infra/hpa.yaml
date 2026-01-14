@@ -1,0 +1,48 @@
+# HorizontalPodAutoscaler (HPA) 설정
+# Pod 수를 CPU/메모리 사용률에 따라 자동으로 조절하는 오토스케일러
+
+
+# cms 서비스용 HPA (백엔드 API 서버)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cms-hpa
+  namespace: dev-cms
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cms  # cms Deployment를 대상으로 함
+  
+  minReplicas: 2     # 최소 Pod 수
+  maxReplicas: 10    # 최대 Pod 수 (API 서버는 트래픽이 많아 더 크게 설정)
+  
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70    # CPU 70% 초과 시 스케일업 (더 빠른 반응)
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 70    # 메모리 70% 초과 시 스케일업 (안정성 향상)
+  
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5분 안정화
+      policies:
+      - type: Percent
+        value: 50         # 50%씩 줄임
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60   # 1분 안정화
+      policies:
+      - type: Percent
+        value: 100        # 100%씩 늘림 (빠른 확장)
+        periodSeconds: 60
+
+---

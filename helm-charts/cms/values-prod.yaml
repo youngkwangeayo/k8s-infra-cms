@@ -1,0 +1,16 @@
+replicaCount: 2
+
+namespace: "prod-cms"
+
+image:
+  pullPolicy: IfNotPresent
+  tag: "0.0.2"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+
+envData:
+  NODE_ENV: "dev"
+  TMP_TEST: "GOOD"
