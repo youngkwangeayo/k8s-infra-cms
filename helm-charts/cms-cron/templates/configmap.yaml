@@ -5,6 +5,6 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{ include "cms-cron.labels" . | nindent 4 }}
+    app.kubernetes.io/component: cron
 data:
-  config.json: |
-{{ .Values.configJson | indent 4 }}
+  {{- toYaml .Values.envData | nindent 4 }}

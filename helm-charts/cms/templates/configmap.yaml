@@ -5,6 +5,6 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "cms.labels" . | nindent 4 }}
-    app.kubernetes.io/component: frontend
+    app.kubernetes.io/component: full-stack
 data:
-{{- toYaml .Values.envData | nindent 4 }}
+  {{- toYaml .Values.envData | nindent 4 }}

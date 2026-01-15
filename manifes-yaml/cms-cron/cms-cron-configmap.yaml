@@ -10,4 +10,4 @@ metadata:
     app.kubernetes.io/component: cron
 data:
   NODE_ENV: "dev"
-  TMP_TEST: "GOOD"
+  CMS_PORT: "3827"

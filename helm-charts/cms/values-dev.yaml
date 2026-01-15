@@ -4,7 +4,7 @@ namespace: "dev-cms"
 
 image:
   pullPolicy: IfNotPresent
-  tag: "0.0.2"
+  tag: "latest"
 
 autoscaling:
   enabled: true
@@ -14,4 +14,4 @@ autoscaling:
 
 envData:
   NODE_ENV: "dev"
-  TMP_TEST: "GOOD"
+  CMS_PORT: "3827"

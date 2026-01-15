@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "cms.labels" . | nindent 4 }}
-    app.kubernetes.io/component: frontend
+    app.kubernetes.io/component: full-stack
 spec:
   # 스케일링 대상 지정
   scaleTargetRef:
@@ -25,7 +25,7 @@ spec:
       name: cpu       # CPU 사용률 기준
       target:
         type: Utilization         # 사용률(%) 기준으로 측정
-        averageUtilization: 60    # 리소스 증가로 임계값 낮춤 (더 빠른 반응)
+        averageUtilization: 70    # 리소스 증가로 임계값 낮춤 (더 빠른 반응)
   - type: Resource
     resource:
       name: memory    # 메모리 사용률 기준

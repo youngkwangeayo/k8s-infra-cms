@@ -1,12 +1,12 @@
 
-namespaceApp: "dev-aiagent"
+namespaceApp: "dev-cms"
 namespaceLogging: "logging"
 
 
-# ACM 인증서 연결 (ACM에서 발급받은 ARN 넣기)  N 개 일때 , 로 연결
-arn: arn:aws:acm:ap-northeast-2:365485194891:certificate/e885ba4f-8d7c-43f0-9923-d053338fc8b8, arn:aws:acm:ap-northeast-2:365485194891:certificate/4b2094ef-fd6b-4ce1-ac47-9d10bf0e9590
+# ACM 인증서 연결 (ACM에서 발급받은 ARN 넣기)  N 개 일때 , 로 연결  예시-arn:1, arn:2 
+arn: arn:aws:acm:ap-northeast-2:365485194891:certificate/e885ba4f-8d7c-43f0-9923-d053338fc8b8
 ingress:
-  name: aiagent-ingress
+  name: cms-ingress
 
 
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/

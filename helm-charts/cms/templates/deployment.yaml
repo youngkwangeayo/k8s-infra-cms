@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "cms.labels" . | nindent 4 }}
-    app.kubernetes.io/component: frontend
+    app.kubernetes.io/component: full-stack
 spec:
   replicas: {{ .Values.replicaCount }} # 팟 몇개를 생성할건지
   strategy: # 애플리케이션을 배포(업데이트)할 때 어떤 방식으로 Pod를 교체할지 정의
@@ -25,6 +25,9 @@ spec:
         - name: {{ include "cms.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }} 
+          envFrom: # ConfigMap의 모든 key-value를 환경변수로 주입
+            - configMapRef:
+                name: {{ include "cms.fullname" . }}-config
           {{- with .Values.resources }}
           resources:   # (CPU/메모리 요청 및 제한)
             {{- toYaml . | nindent 12 }}
@@ -43,14 +46,3 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.containerPort }}
-          volumeMounts: # 컨테이너 볼륨 마운트
-            - name: config-volume
-              mountPath: /usr/src/app/conf # 여기에 마운트됨 도커파일 WORKDIR 경로확인
-              readOnly: true
-      volumes:  #팟의 볼륨 생성
-        - name: config-volume
-          configMap:
-            name: {{ include "cms.fullname" . }}-config
-            items:
-              - key: config.js     # ConfigMap의 키 이름
-                path: config.js   # 실제로 /usr/src/app/conf/config.js 으로 보임

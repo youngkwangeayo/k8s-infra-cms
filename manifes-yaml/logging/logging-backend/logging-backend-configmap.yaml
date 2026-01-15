@@ -13,5 +13,5 @@ data:
     {
       "logLevel": "info",
       "port": 8080,
-        LOG_BASE_DIR=/log
+      "LOG_BASE_DIR": "/var/log/logging_backend"
     }

@@ -1,3 +1,4 @@
+
 # 노드마다 수집
 kind: DaemonSet
 
@@ -33,6 +34,11 @@ metricsPort: 2020
 podAnnotations:
   fluentbit.io/exclude: "true"
 
+
+# 수집할네임스페이스
+collectionNameSpace: dev-cms
+
+
 # === 클래식 모드 설정 ===
 config:
   service: |
@@ -51,7 +57,7 @@ config:
   inputs: |
     [INPUT]
         Name              tail
-        Path              /var/log/containers/*_dev-cms_*.log
+        Path              /var/log/containers/*_{{ .Values.collectionNameSpace }}_*.log
         Exclude_Path      /var/log/containers/*fluent-bit*.log
         Tag               kube.*
         multiline.parser  docker, cri

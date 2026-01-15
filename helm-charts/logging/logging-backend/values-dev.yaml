@@ -12,8 +12,8 @@ storage: 10Gi
 
 configJson: |
   {
-    "NODE_ENV": "development",
+    "NODE_ENV": "production",
     "PORT": 8080,
-    "LOG_LEVEL": "debug"
+    LOG_BASE_DIR": "/var/log/logging_backend"
   }
 

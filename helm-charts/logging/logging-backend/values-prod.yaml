@@ -10,3 +10,9 @@ image:
 
 storage: 10Gi
 
+configJson: |
+  {
+    "NODE_ENV": "production",
+    "PORT": 8080,
+    LOG_BASE_DIR": "/var/log/logging_backend"
+  }

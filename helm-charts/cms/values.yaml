@@ -4,50 +4,48 @@ namespace: "dev-cms"
 autoscaling:
   enabled: true
   minReplicas: 2
-  maxReplicas: 6
-
+  maxReplicas: 10
 
 maxSurge: 1 # 새 팟 생성
 maxUnavailable: 1 # 생성되면 교체로 꺼질 팟 수
 
 image:
-  repository: 3654*****.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-***:latest
+  repository: 365485*****91.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-dev-cms
   # This sets the pull policy for images.
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
-
-
 # Deployment 의 spec.template.spec.containers.name[0] 안의 obj
-containerPort: 80
-resources: # (CPU/메모리 요청 및 제한)
-  requests:
-    cpu: "150m"
-    memory: "192Mi"
-  limits:
-    cpu: "600m"
-    memory: "768Mi"
-startupProbe: # 처음 뜰 때까지 보호
+containerPort: 3827
+resources: # 컨테이너 리소스 제한 (노드 자원 보호 및 스케줄링용)
+  requests: # 최소 보장 리소스 (스케줄러가 노드 선택 시 참고) (1000m = 1 CPU 코어, 100m = 0.1 CPU)
+    cpu: "300m" # 0.300 CPU core
+    memory: "500Mi"
+  limits: # 최대 사용 가능 리소스 (초과 시 CPU throttling, 메모리는 OOMKilled)
+    cpu: "600m" # 0.6 CPU core
+    memory: "700Mi"
+startupProbe: # 앱 초기 기동 체크 (prisma generate 등 초기화 시간 확보)
   httpGet:
-    path: /healthz
-    port: 80
-  periodSeconds: 5
-  failureThreshold: 12 # 최대 1분까지 대기 (5 * 12)
-readinessProbe: # 체크안되면 로드밸런서(ClusterIP, Service)트래픽안보냄.
+    path: /command/checkHealth
+    port: 3827
+  periodSeconds: 5 # 5초마다 체크
+  failureThreshold: 12 # 12번 실패 시 컨테이너 재시작 (5초 × 12 = 최대 60초 대기)˝
+readinessProbe: # 트래픽 수신 준비 체크 (실패 시 Service 엔드포인트에서 제외, Pod는 유지)
   httpGet:
-    path: /healthz
-    port: 80
-  initialDelaySeconds: 5 # 첫 체크 전 대기 시간
-  periodSeconds: 10 # 체크 간격 (기본 10초)
-  failureThreshold: 3 # 몇 번 실패하면 'Not Ready'
-  timeoutSeconds: 5
-livenessProbe: #앱의 헬스체크 . 헬싱안될시 pod안의 컨테이너 kill 하고 재시작 (컨테이너자가복구)
+    path: /command/checkHealth
+    port: 3827
+  initialDelaySeconds: 5 # startupProbe 성공 후 5초 뒤 첫 체크
+  periodSeconds: 10 # 10초 간격으로 체크
+  failureThreshold: 3 # 3번 연속 실패 시 Not Ready → 트래픽 차단
+  timeoutSeconds: 5 # 응답 대기 시간 (5초 초과 시 실패 처리)
+livenessProbe: # 앱 생존 체크 (실패 시 컨테이너 재시작, 무한루프/데드락 복구용)
   httpGet:
-    path: /healthz
-    port: 80
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 5
+    path: /command/checkHealth
+    port: 3827
+  initialDelaySeconds: 10 # startupProbe 성공 후 10초 뒤 첫 체크
+  periodSeconds: 10 # 10초 간격으로 체크
+  timeoutSeconds: 5 # 응답 대기 시간
+  # failureThreshold 기본값: 3 (3번 실패 시 컨테이너 kill → 재시작)
 # END Deployment 의 spec.containers
 

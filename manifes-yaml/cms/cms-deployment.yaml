@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: cms
-          image: 3654*****.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-***:latest
+          image: 365485194891.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-dev-cms:latest
           imagePullPolicy: Always # 항상 최신 이미지 pull (개발환경용, 운영에서는 특정 태그 권장)
           envFrom: # ConfigMap의 모든 key-value를 환경변수로 주입
             - configMapRef:

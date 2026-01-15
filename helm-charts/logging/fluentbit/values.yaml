@@ -36,7 +36,7 @@ podAnnotations:
 
 
 # 수집할네임스페이스
-collectionNameSpace: dev-aiagent
+collectionNameSpace: dev-cms
 
 
 # === 클래식 모드 설정 ===

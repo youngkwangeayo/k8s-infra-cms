@@ -1,5 +1,0 @@
-
-region: ap-northeast-2
-clusterName: prod-aiagent-eks-ap-northeast-2
-vpcId:  vpc-055aaa856fedcc955
-

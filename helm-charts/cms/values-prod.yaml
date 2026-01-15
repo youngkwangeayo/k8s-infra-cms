@@ -3,8 +3,9 @@ replicaCount: 2
 namespace: "prod-cms"
 
 image:
+  repository: 36548****1.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-dev-cms
   pullPolicy: IfNotPresent
-  tag: "0.0.2"
+  tag: "latest"
 
 autoscaling:
   enabled: true
@@ -12,5 +13,5 @@ autoscaling:
   maxReplicas: 10
 
 envData:
-  NODE_ENV: "dev"
-  TMP_TEST: "GOOD"
+  NODE_ENV: "prod"
+  CMS_PORT: "3827"
