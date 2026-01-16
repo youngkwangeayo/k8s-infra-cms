@@ -3,6 +3,6 @@ namespaceApp: "prod-cms"
 
 ingress:
   hosts:
-    - name: service.nextpay.co.kr
+    - name: se****.ne****.co.kr
       service: cms-service
       path: "/"

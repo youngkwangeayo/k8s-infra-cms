@@ -14,7 +14,7 @@ metadata:
 spec:
   ingressClassName: alb # ALB Ingress Controller가 처리해야 함을 명시 (IngressClass 리소스 이름)
   rules:  #  라우팅 정의
-  - host: dev-cms.nextpay.co.kr
+  - host: dev-cm*.ne****.co.kr
     http:
       paths:
       - pathType: Prefix  # 접두어 기반 매칭 (예: /api, /admin도 포함)
