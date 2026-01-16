@@ -1,5 +1,5 @@
 
 region: ap-northeast-2
-clusterName: eks-dev-cms-k8s
-vpcId:  vpc-276cc74c
+clusterName: eks-dev-cms
+vpcId:  vpc-276c****
 
