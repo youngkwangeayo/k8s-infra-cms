@@ -1,55 +1,38 @@
 # 구조별 파일 나눈 기준
 > ## 주의! ##
-> helm-charts 와 modern-legacy 중복 베포 X 1가지 버전으로 관리할것
+> helm-charts 와 manifest-yaml 중복 베포 X 1가지 버전으로 관리할것
 > 
 
 # 실행 파일
->  md/new-run.md 헬름
->  md/run-cmd.md 모던
+>  md/helm-PROVISIONING.md 헬름
+>  md/manifest-PROVISIONING 모던
 
 
 # 📁 필수 YAML 파일 구조 (서비스별)
 >   1. 공통 인프라
->   namespace.yaml – 네임스페이스 정의 (예: aiagent 네임스페이스)
+>   namespace.yaml – 네임스페이스 정의 (예: cms 네임스페이스)
 >   
 >   ingress.yaml – 전체 ingress 설정 (ALB 연동 포함)
->   
->   2. aiagent-api (백엔드 앱서버)
->   aiagent-api-deployment.yaml – Deployment (레플리카 수, 이미지, 환경변수 등 포함)
->   
->   aiagent-api-service.yaml – Service (ClusterIP 또는 LoadBalancer)
->   
->   aiagent-api-configmap.yaml (선택) – 설정파일 분리 시
->   
->   aiagent-api-secret.yaml (선택) – DB 인증 정보 등
->   
->   3. aiagent-system (프론트 앱서버)
->   aiagent-system-deployment.yaml
->   
->   aiagent-system-service.yaml
->   
->   aiagent-system-ingress.yaml (URL path: /system 등으로 분기할 경우)
->   
->   4. aiagent (프론트 앱서버)
->   aiagent-deployment.yaml
->   
->   aiagent-service.yaml
->   
->   aiagent-ingress.yaml (URL path: / 등 기본 루트로 분기할 경우)
->   
->   5. redis
->   redis-deployment.yaml (또는 StatefulSet, 필요 시)
->   
->   redis-service.yaml (type: ClusterIP)
->   
->   redis-configmap.yaml (선택) – 비밀번호 및 포트 설정 등
->   
->   redis-secret.yaml (선택) – 비밀번호 분리할 경우
 
-# ✅ 추가적으로 고려하면 좋은 파일
 >   hpa.yaml – HorizontalPodAutoscaler (부하에 따라 자동 스케일링)
 >   
->   pvc.yaml – PersistentVolumeClaim (Redis나 로그 저장소 필요 시)
+>   pvc.yaml – PersistentVolumeClaim ( 영구볼륨 스토리지)
+>   
+>   2. cms (풀스택 웹서버)
+>   cms-deployment.yaml – Deployment (레플리카 수, 이미지, 환경변수 등 포함)
+>   
+>   cms-service.yaml – Service (ClusterIP 또는 LoadBalancer)
+>   
+>   cms-configmap.yaml (선택) – 설정파일 분리 시
+>   
+>   cms-secret.yaml (선택) – DB 인증 정보 등
+>   
+>   3. cms-cron (프론트 앱서버)
+>   cms-cron-deployment.yaml
+>   
+>   cms-cron-configmap.yaml (선택) – 설정파일 분리 시
+>   
+# ✅ 추가적으로 고려하면 좋은 파일
 >   
 >   networkpolicy.yaml – 보안 제어 목적
 >   

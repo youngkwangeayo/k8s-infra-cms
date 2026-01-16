@@ -4,7 +4,7 @@
 # 모던 얌 매니페스트 베포
 
 ```bash
-cd manifes-yaml
+cd manifest-yaml
 
 kubectl apply -f infra/namespace.yaml
 kubectl apply -f infra/
