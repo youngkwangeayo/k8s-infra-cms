@@ -22,7 +22,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: logging-backend
-          image: 365485194891.dkr.ecr.ap-northeast-2.amazonaws.com/logging_backend:0.0.5
+          image: 36548*****891.dkr.ecr.ap-northeast-2.amazonaws.com/logging_backend:0.0.5
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
