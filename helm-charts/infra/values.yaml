@@ -7,6 +7,7 @@ namespaceLogging: "logging"
 arn: arn:aws:acm:ap-northeast-2:3654*****891:certificate/e885ba4f-8d7c-4*****23-d0533******8b8
 ingress:
   name: cms-ingress
+  healthcheck : "/command/checkHealth"
 
 
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/

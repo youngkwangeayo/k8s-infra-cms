@@ -9,5 +9,6 @@ image:
 
 
 envData:
+  CRON : "ENABLE"
   NODE_ENV: "dev"
   CMS_PORT: "3827"

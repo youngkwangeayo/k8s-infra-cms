@@ -3,11 +3,12 @@ replicaCount: 1
 namespace: "prod-cms"
 
 image:
-  repository: 36****94891.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-prod-cms
+  repository: 365485194891.dkr.ecr.ap-northeast-2.amazonaws.com/ecr-prod-cms
   pullPolicy: IfNotPresent
   tag: "latest"
 
 
 envData:
+  CRON : "ENABLE"
   NODE_ENV: "prod"
   CMS_PORT: "3827"
